@@ -1,0 +1,35 @@
+
+CHIP cw3 {
+     IN indata[8], enable, load;
+     OUT sout, complete;
+
+     PARTS:
+
+        Bit(x=indata[0], load=load, out=out0);
+        And(x = out0, y = out0, out = save0);
+        Bit(x=indata[1], load=load, out=out1);
+        And(x = out1, y = out1, out = save1);
+        Bit(x=indata[2], load=load, out=out2);
+        And(x = out2, y = out2, out = save2);
+        Bit(x=indata[3], load=load, out=out3);
+        And(x = out3, y = out3, out = save3);
+        Bit(x=indata[4], load=load, out=out4);
+        And(x = out4, y = out4, out = save4);
+        Bit(x=indata[5], load=load, out=out5);
+        And(x = out5, y = out5, out = save5);
+        Bit(x=indata[6], load=load, out=out6);
+        And(x = out6, y = out6, out = save6);
+        Bit(x=indata[7], load=load, out=out7);
+        And(x = out7, y = out7, out = save7);
+
+        DFF(x = save0, out = dffout0);
+        DFF(x = dffout0 , out= dffout1);
+        DFF(x = dffout1 , out= dffout2);
+        DFF(x = dffout2 , out= dffout3);
+        DFF(x = dffout3 , out= dffout4);
+        DFF(x = dffout4 , out= dffout5);
+        DFF(x = dffout5 , out= dffout6);
+        DFF(x = dffout6 , out= dffout7);
+        DFF(x = dffout7 , out= sout);
+
+    }

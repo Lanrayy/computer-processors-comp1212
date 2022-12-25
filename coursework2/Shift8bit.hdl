@@ -1,0 +1,39 @@
+/*
+This file contains the solution to coursework 2 part 1
+
+
+*/
+
+
+
+CHIP Shift8bit {
+    IN x;
+    OUT out[8];
+
+    PARTS:
+    DFF(x = x, out = out0);
+    And(x = out0, y = out0, out = out[0]);
+
+    DFF(x = out0, out = out1);
+    And(x = out1, y=out1, out= out[1]);
+
+    DFF(x = out1, out = out2);
+    And(x = out2, y=out2, out= out[2]);
+
+    DFF(x = out2, out = out3);
+    And(x = out3, y=out3, out= out[3]);
+
+    DFF(x = out3, out = out4);
+    And(x = out4, y=out4, out= out[4]);
+
+    DFF(x = out4, out = out5);
+    And(x = out5, y=out5, out= out[5]);
+
+    DFF(x = out5, out = out6);
+    And(x = out6, y=out6, out= out[6]);
+
+    DFF(x = out6, out = out7);
+    And(x = out7, y=out7, out= out[7]);
+
+
+}

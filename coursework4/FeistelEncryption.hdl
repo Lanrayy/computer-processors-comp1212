@@ -1,0 +1,200 @@
+/*
+FeistelEncryption
+
+Li+1 = Ri
+Ri+1 =Li ⊕F(Ri,Ki)
+Written by Olanrewaju Sodeinde
+*/
+
+CHIP FeistelEncryption {
+      IN plaintext[16], key[8];
+      OUT ciphertext[16];
+
+      PARTS:
+      /*ROUND 1*/
+      /*XOR the plaintext[0..7] and the key */
+      Xor(x=plaintext[0], y=key[0], out=roundOneXor0);
+      Xor(x=plaintext[1], y=key[1], out=roundOneXor1);
+      Xor(x=plaintext[2], y=key[2], out=roundOneXor2);
+      Xor(x=plaintext[3], y=key[3], out=roundOneXor3);
+      Xor(x=plaintext[4], y=key[4], out=roundOneXor4);
+      Xor(x=plaintext[5], y=key[5], out=roundOneXor5);
+      Xor(x=plaintext[6], y=key[6], out=roundOneXor6);
+      Xor(x=plaintext[7], y=key[7], out=roundOneXor7);
+
+      /* XOR the result with plaintext[8..15] */
+      Xor(x=plaintext[8],  y=roundOneXor0, out=roundOneResult0);
+      Xor(x=plaintext[9],  y=roundOneXor1, out=roundOneResult1);
+      Xor(x=plaintext[10], y=roundOneXor2, out=roundOneResult2);
+      Xor(x=plaintext[11], y=roundOneXor3, out=roundOneResult3);
+      Xor(x=plaintext[12], y=roundOneXor4, out=roundOneResult4);
+      Xor(x=plaintext[13], y=roundOneXor5, out=roundOneResult5);
+      Xor(x=plaintext[14], y=roundOneXor6, out=roundOneResult6);
+      Xor(x=plaintext[15], y=roundOneXor7, out=roundOneResult7);
+
+      /*Get the values for the LEFT 8 bits */
+      And(x=plaintext[0], y=plaintext[0], out=roundOneResult8);
+      And(x=plaintext[1], y=plaintext[1], out=roundOneResult9);
+      And(x=plaintext[2], y=plaintext[2], out=roundOneResult10);
+      And(x=plaintext[3], y=plaintext[3], out=roundOneResult11);
+      And(x=plaintext[4], y=plaintext[4], out=roundOneResult12);
+      And(x=plaintext[5], y=plaintext[5], out=roundOneResult13);
+      And(x=plaintext[6], y=plaintext[6], out=roundOneResult14);
+      And(x=plaintext[7], y=plaintext[7], out=roundOneResult15);
+
+      /*Circular Shift the Key*/
+      And(x=key[7], y=key[7], out=overflow);
+      And(x=key[0], y=key[0], out=keyOne1);
+      And(x=key[1], y=key[1], out=keyOne2);
+      And(x=key[2], y=key[2], out=keyOne3);
+      And(x=key[3], y=key[3], out=keyOne4);
+      And(x=key[4], y=key[4], out=keyOne5);
+      And(x=key[5], y=key[5], out=keyOne6);
+      And(x=key[6], y=key[6], out=keyOne7);
+      And(x=overflow, y=overflow, out=keyOne0);
+
+
+
+
+      /* ROUND 2*/
+
+      /*XOR the plaintext[0..7] and the key */
+      Xor(x=roundOneResult0, y=keyOne0, out=roundTwoXor0);
+      Xor(x=roundOneResult1, y=keyOne1, out=roundTwoXor1);
+      Xor(x=roundOneResult2, y=keyOne2, out=roundTwoXor2);
+      Xor(x=roundOneResult3, y=keyOne3, out=roundTwoXor3);
+      Xor(x=roundOneResult4, y=keyOne4, out=roundTwoXor4);
+      Xor(x=roundOneResult5, y=keyOne5, out=roundTwoXor5);
+      Xor(x=roundOneResult6, y=keyOne6, out=roundTwoXor6);
+      Xor(x=roundOneResult7, y=keyOne7, out=roundTwoXor7);
+
+      /* XOR the result with plaintext[8..15] */
+      Xor(x=roundOneResult8,  y=roundTwoXor0, out=roundTwoResult0);
+      Xor(x=roundOneResult9,  y=roundTwoXor1, out=roundTwoResult1);
+      Xor(x=roundOneResult10, y=roundTwoXor2, out=roundTwoResult2);
+      Xor(x=roundOneResult11, y=roundTwoXor3, out=roundTwoResult3);
+      Xor(x=roundOneResult12, y=roundTwoXor4, out=roundTwoResult4);
+      Xor(x=roundOneResult13, y=roundTwoXor5, out=roundTwoResult5);
+      Xor(x=roundOneResult14, y=roundTwoXor6, out=roundTwoResult6);
+      Xor(x=roundOneResult15, y=roundTwoXor7, out=roundTwoResult7);
+
+      /*Get the values for the LEFT 8 bits */
+      And(x=roundOneResult0, y=roundOneResult0, out=roundTwoResult8);
+      And(x=roundOneResult1, y=roundOneResult1, out=roundTwoResult9);
+      And(x=roundOneResult2, y=roundOneResult2, out=roundTwoResult10);
+      And(x=roundOneResult3, y=roundOneResult3, out=roundTwoResult11);
+      And(x=roundOneResult4, y=roundOneResult4, out=roundTwoResult12);
+      And(x=roundOneResult5, y=roundOneResult5, out=roundTwoResult13);
+      And(x=roundOneResult6, y=roundOneResult6, out=roundTwoResult14);
+      And(x=roundOneResult7, y=roundOneResult7, out=roundTwoResult15);
+
+      /*Circular Shift the Key*/
+      And(x=keyOne7, y=keyOne7, out=overflow2);
+      And(x=keyOne0, y=keyOne0, out=keyTwo1);
+      And(x=keyOne1, y=keyOne1, out=keyTwo2);
+      And(x=keyOne2, y=keyOne2, out=keyTwo3);
+      And(x=keyOne3, y=keyOne3, out=keyTwo4);
+      And(x=keyOne4, y=keyOne4, out=keyTwo5);
+      And(x=keyOne5, y=keyOne5, out=keyTwo6);
+      And(x=keyOne6, y=keyOne6, out=keyTwo7);
+      And(x=overflow2, y=overflow2, out=keyTwo0);
+
+
+
+
+
+      /*ROUND 3*/
+
+      /*XOR the plaintext[0..7] and the key */
+      Xor(x=roundTwoResult0, y=keyTwo0, out=roundThreeXor0);
+      Xor(x=roundTwoResult1, y=keyTwo1, out=roundThreeXor1);
+      Xor(x=roundTwoResult2, y=keyTwo2, out=roundThreeXor2);
+      Xor(x=roundTwoResult3, y=keyTwo3, out=roundThreeXor3);
+      Xor(x=roundTwoResult4, y=keyTwo4, out=roundThreeXor4);
+      Xor(x=roundTwoResult5, y=keyTwo5, out=roundThreeXor5);
+      Xor(x=roundTwoResult6, y=keyTwo6, out=roundThreeXor6);
+      Xor(x=roundTwoResult7, y=keyTwo7, out=roundThreeXor7);
+
+      /* XOR the result with plaintext[8..15] */
+      Xor(x=roundTwoResult8,  y=roundThreeXor0, out=roundThreeResult0);
+      Xor(x=roundTwoResult9,  y=roundThreeXor1, out=roundThreeResult1);
+      Xor(x=roundTwoResult10, y=roundThreeXor2, out=roundThreeResult2);
+      Xor(x=roundTwoResult11, y=roundThreeXor3, out=roundThreeResult3);
+      Xor(x=roundTwoResult12, y=roundThreeXor4, out=roundThreeResult4);
+      Xor(x=roundTwoResult13, y=roundThreeXor5, out=roundThreeResult5);
+      Xor(x=roundTwoResult14, y=roundThreeXor6, out=roundThreeResult6);
+      Xor(x=roundTwoResult15, y=roundThreeXor7, out=roundThreeResult7);
+
+      /*Get the values for the LEFT 8 bits */
+      And(x=roundTwoResult0, y=roundTwoResult0, out=roundThreeResult8);
+      And(x=roundTwoResult1, y=roundTwoResult1, out=roundThreeResult9);
+      And(x=roundTwoResult2, y=roundTwoResult2, out=roundThreeResult10);
+      And(x=roundTwoResult3, y=roundTwoResult3, out=roundThreeResult11);
+      And(x=roundTwoResult4, y=roundTwoResult4, out=roundThreeResult12);
+      And(x=roundTwoResult5, y=roundTwoResult5, out=roundThreeResult13);
+      And(x=roundTwoResult6, y=roundTwoResult6, out=roundThreeResult14);
+      And(x=roundTwoResult7, y=roundTwoResult7, out=roundThreeResult15);
+
+      /*Circular Shift the Key*/
+      And(x=keyTwo7, y=keyTwo7, out=overflow3);
+      And(x=keyTwo0, y=keyTwo0, out=keyThree1);
+      And(x=keyTwo1, y=keyTwo1, out=keyThree2);
+      And(x=keyTwo2, y=keyTwo2, out=keyThree3);
+      And(x=keyTwo3, y=keyTwo3, out=keyThree4);
+      And(x=keyTwo4, y=keyTwo4, out=keyThree5);
+      And(x=keyTwo5, y=keyTwo5, out=keyThree6);
+      And(x=keyTwo6, y=keyTwo6, out=keyThree7);
+      And(x=overflow3, y=overflow3, out=keyThree0);
+
+      /*ROUND 4*/
+
+        /*XOR the plaintext[0..7] and the key */
+        Xor(x=roundThreeResult0, y=keyThree0, out=roundFourXor0);
+        Xor(x=roundThreeResult1, y=keyThree1, out=roundFourXor1);
+        Xor(x=roundThreeResult2, y=keyThree2, out=roundFourXor2);
+        Xor(x=roundThreeResult3, y=keyThree3, out=roundFourXor3);
+        Xor(x=roundThreeResult4, y=keyThree4, out=roundFourXor4);
+        Xor(x=roundThreeResult5, y=keyThree5, out=roundFourXor5);
+        Xor(x=roundThreeResult6, y=keyThree6, out=roundFourXor6);
+        Xor(x=roundThreeResult7, y=keyThree7, out=roundFourXor7);
+
+        /* XOR the result with plaintext[8..15] */
+        Xor(x=roundThreeResult8,  y=roundFourXor0, out=roundFourResult0);
+        Xor(x=roundThreeResult9,  y=roundFourXor1, out=roundFourResult1);
+        Xor(x=roundThreeResult10, y=roundFourXor2, out=roundFourResult2);
+        Xor(x=roundThreeResult11, y=roundFourXor3, out=roundFourResult3);
+        Xor(x=roundThreeResult12, y=roundFourXor4, out=roundFourResult4);
+        Xor(x=roundThreeResult13, y=roundFourXor5, out=roundFourResult5);
+        Xor(x=roundThreeResult14, y=roundFourXor6, out=roundFourResult6);
+        Xor(x=roundThreeResult15, y=roundFourXor7, out=roundFourResult7);
+
+        /*Get the values for the LEFT 8 bits */
+        And(x=roundThreeResult0, y=roundThreeResult0, out=roundFourResult8);
+        And(x=roundThreeResult1, y=roundThreeResult1, out=roundFourResult9);
+        And(x=roundThreeResult2, y=roundThreeResult2, out=roundFourResult10);
+        And(x=roundThreeResult3, y=roundThreeResult3, out=roundFourResult11);
+        And(x=roundThreeResult4, y=roundThreeResult4, out=roundFourResult12);
+        And(x=roundThreeResult5, y=roundThreeResult5, out=roundFourResult13);
+        And(x=roundThreeResult6, y=roundThreeResult6, out=roundFourResult14);
+        And(x=roundThreeResult7, y=roundThreeResult7, out=roundFourResult15);
+
+
+      /* Display Results*/
+      And(x=roundFourResult0, y=roundFourResult0, out=ciphertext[0]);
+      And(x=roundFourResult1, y=roundFourResult1, out=ciphertext[1]);
+      And(x=roundFourResult2, y=roundFourResult2, out=ciphertext[2]);
+      And(x=roundFourResult3, y=roundFourResult3, out=ciphertext[3]);
+      And(x=roundFourResult4, y=roundFourResult4, out=ciphertext[4]);
+      And(x=roundFourResult5, y=roundFourResult5, out=ciphertext[5]);
+      And(x=roundFourResult6, y=roundFourResult6, out=ciphertext[6]);
+      And(x=roundFourResult7, y=roundFourResult7, out=ciphertext[7]);
+      And(x=roundFourResult8, y=roundFourResult8, out=ciphertext[8]);
+      And(x=roundFourResult9, y=roundFourResult9, out=ciphertext[9]);
+      And(x=roundFourResult10, y=roundFourResult10, out=ciphertext[10]);
+      And(x=roundFourResult11, y=roundFourResult11, out=ciphertext[11]);
+      And(x=roundFourResult12, y=roundFourResult12, out=ciphertext[12]);
+      And(x=roundFourResult13, y=roundFourResult13, out=ciphertext[13]);
+      And(x=roundFourResult14, y=roundFourResult14, out=ciphertext[14]);
+      And(x=roundFourResult15, y=roundFourResult15, out=ciphertext[15]);
+
+}

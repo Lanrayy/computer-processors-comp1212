@@ -1,0 +1,15 @@
+/**
+This file contains the solution for Coursework 1, Part 2
+Formula:
+(¬a∧b)∨(b∧¬c)∨(b∧c)∨(a∧¬b∧¬c)
+*/
+
+CHIP CW1Q2 {
+    IN a, b, c;
+    OUT f;
+
+    PARTS:
+    Not (x=c, out=notc);
+    And (x=a, y=notc, out=aANDc);
+    Or (x=aANDc, y=b, out=f);
+}

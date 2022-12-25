@@ -1,0 +1,65 @@
+
+CHIP cw6 {
+     IN indata[8], enable, load;
+     OUT sout, complete;
+
+     PARTS:
+        Not(x = load, out = notload);
+
+        Bit(x=indata[0], load=load, out=out0);
+        Bit(x=indata[1], load=load, out=out1);
+        Bit(x=indata[2], load=load, out=out2);
+        Bit(x=indata[3], load=load, out=out3);
+        Bit(x=indata[4], load=load, out=out4);
+        Bit(x=indata[5], load=load, out=out5);
+        Bit(x=indata[6], load=load, out=out6);
+        Bit(x=indata[7], load=load, out=out7);
+
+
+        //InData0
+        DFF(x = out0 , out = dff0);
+
+        //InData1
+        And(x = dff0, y = load, out= and1out);
+        And(x = notload, y = out1, out = and2out);
+        Or(x = and1out, y = and2out out = or1out);
+        DFF(x = or1out , out = dff1);
+
+        //InData2
+        And(x = dff1, y = load, out= and3out);
+        And(x = notload, y = out2, out = and4out);
+        Or(x = and3out, y = and4out out = or2out);
+        DFF(x = or2out , out = dff2);
+
+        //InData3
+        And(x = dff2, y = load, out= and5out);
+        And(x = notload, y = out3, out = and6out);
+        Or(x = and5out, y = and6out out = or3out);
+        DFF(x = or3out , out = dff3);
+
+        //InData4
+        And(x = dff3, y = load, out= and7out);
+        And(x = notload, y = out4, out = and8out);
+        Or(x = and7out, y = and8out out = or4out);
+        DFF(x = or4out , out = dff4);
+
+        //InData5
+        And(x = dff4, y = load, out= and9out);
+        And(x = notload, y = out5, out = and10out);
+        Or(x = and9out, y = and10out out = or5out);
+        DFF(x = or5out , out = dff5);
+
+        //InData6
+        And(x = dff5, y = load, out= and11out);
+        And(x = notload, y = out6, out = and12out);
+        Or(x = and11out, y = and12out out = or6out);
+        DFF(x = or6out , out = dff6);
+
+        //InData7
+        And(x = dff6, y = load, out= and13out);
+        And(x = notload, y = out7, out = and14out);
+        Or(x = and13out, y = and14out out = or7out);
+        DFF(x = or7out , out = sout);
+
+
+    }

@@ -1,0 +1,49 @@
+
+CHIP cw2 {
+     IN indata[8], enable, load;
+     OUT sout, complete;
+
+     PARTS:
+
+        Bit(x=indata[0], load=load, out=out0);
+        And(x = out0, y = out0, out = s0);
+        Bit(x=indata[1], load=load, out=out1);
+        And(x = out1, y = out1, out = s1);
+        Bit(x=indata[2], load=load, out=out2);
+        And(x = out2, y = out2, out = s2);
+        Bit(x=indata[3], load=load, out=out3);
+        And(x = out3, y = out3, out = s3);
+        Bit(x=indata[4], load=load, out=out4);
+        And(x = out4, y = out4, out = s4);
+        Bit(x=indata[5], load=load, out=out5);
+        And(x = out5, y = out5, out = s5);
+        Bit(x=indata[6], load=load, out=out6);
+        And(x = out6, y = out6, out = s6);
+        Bit(x=indata[7], load=load, out=out7);
+        And(x = out7, y = out7, out = s7);
+
+        Mux(x = true, y = s0, sel = true, out = m0);
+        DFF(x = m0, out = d0);
+
+        Mux(x = d0, y = s1, sel = true, out = m1);
+        DFF(x = m1, out = d1);
+
+        Mux(x = d1, y = s2, sel = true, out = m2);
+        DFF(x = m2, out = d2);
+
+        Mux(x = d2, y = s3, sel = true, out = m3);
+        DFF(x = m3, out = d3);
+
+        Mux(x = d3, y = s4, sel = true, out = m4);
+        DFF(x = m4, out = d4);
+
+        Mux(x = d4, y = s5, sel = true, out = m5);
+        DFF(x = m5, out = d5);
+
+        Mux(x = d5, y = s6, sel = true, out = m6);
+        DFF(x = m6, out = d6);
+
+        Mux(x = d6, y = s7, sel = true, out = m7);
+        DFF(x = m7, out = sout);
+
+    }

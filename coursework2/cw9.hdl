@@ -1,0 +1,32 @@
+
+CHIP cw2 {
+     IN indata[8], enable, load;
+     OUT sout, complete;
+
+     PARTS:
+
+        Mux(x = true, y = indata[0], sel = true, out = m0);
+        DFF(x = m0, out = d0);
+
+        Mux(x = d0, y = indata[1], sel = true, out = m1);
+        DFF(x = m1, out = d1);
+
+        Mux(x = d1, y = indata[2], sel = true, out = m2);
+        DFF(x = m2, out = d2);
+
+        Mux(x = d2, y = indata[3], sel = true, out = m3);
+        DFF(x = m3, out = d3);
+
+        Mux(x = d3, y = indata[4], sel = true, out = m4);
+        DFF(x = m4, out = d4);
+
+        Mux(x = d4, y = indata[5], sel = true, out = m5);
+        DFF(x = m5, out = d5);
+
+        Mux(x = d5, y = indata[6], sel = true, out = m6);
+        DFF(x = m6, out = d6);
+
+        Mux(x = d6, y = indata[7], sel = true, out = m7);
+        DFF(x = m7, out = sout);
+
+    }

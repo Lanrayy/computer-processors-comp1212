@@ -1,0 +1,65 @@
+/**
+This file contains the solution for Coursework 1, Part 1
+Formula:
+(¬s1∧¬s2∧x∧y)∨(¬s1∧s2∧¬x∧y)∨(¬s1∧s2∧x∧¬y)∨
+(s1∧¬s2∧¬x∧y)∨(s1∧¬s2∧x∧¬y)∨(s1∧¬s2∧x∧y)∨
+(s1∧s2∧¬x∧y)∨(s1∧s2∧x∧y)∨(s1∧s2∧¬x∧¬y);
+*/
+
+CHIP CW1Q1 {
+    IN s1, s2, x, y;
+    OUT f;
+
+    PARTS:
+    //Negations of the literals
+    Not(x=s1, out=Nots1);
+    Not(x=s2, out= Nots2);
+    Not(x=x, out=Notx);
+    Not(x=y, out=Noty);
+
+    And(x = Nots1, y = Nots2, out = Nots1ANDNots2);
+    And(x = x, y = y, out = xANDy);
+    And(x = Nots1, y = s2, out = Nots1ANDs2);
+    And(x = Notx, y = y, out = NotxANDy);
+    And(x = x, y = Noty, out = xANDNoty);
+    And(x = s1, y = Nots2, out = s1ANDNots2);
+    And(x = s1, y = s2, out =s1ANDs2);
+    And(x = Notx, y = Noty, out =NotxANDNoty);
+
+    // This gives each line of the truth table
+    // Each formula is in CNF
+    And(x = Nots1ANDNots2, y =xANDy, out = Nots1ANDNots2ANDxANDy);
+    And(x = Nots1ANDs2, y = NotxANDy, out = Nots1ANDs2ANDNotxANDy);
+    And(x = Nots1ANDs2 , y = xANDNoty, out = Nots1ANDs2ANDxANDNoty);
+    And(x = s1ANDNots2, y = NotxANDy, out = s1ANDNots2ANDNotxANDy);
+    And(x = s1ANDNots2, y = xANDNoty, out = s1ANDNots2ANDxANDNoty);
+    And(x = s1ANDNots2, y = xANDy, out = s1ANDNots2ANDxANDy);
+    And(x = s1ANDs2, y = NotxANDy, out = s1ANDs2ANDNotxANDy);
+    And(x = s1ANDs2 , y = xANDy, out = s1ANDs2ANDxANDy);
+    And(x = s1ANDs2 , y = NotxANDNoty, out = s1ANDs2ANDNotxANDNoty);
+
+    //Now OR all the conjunctions
+    Or(x = Nots1ANDNots2ANDxANDy, y = Nots1ANDs2ANDNotxANDy, out = Nots1ANDNots2ANDxANDyORNots1ANDs2ANDNotxANDy);
+    Or(x = Nots1ANDs2ANDxANDNoty, y = s1ANDNots2ANDNotxANDy, out = Nots1ANDs2ANDxANDNotyORs1ANDNots2ANDNotxANDy);
+    Or(x = s1ANDNots2ANDxANDNoty, y = s1ANDNots2ANDxANDy, out = s1ANDNots2ANDxANDNotyORs1ANDNots2ANDxANDy );
+    Or(x = s1ANDs2ANDNotxANDy, y = s1ANDs2ANDxANDy, out = s1ANDs2ANDNotxANDyORs1ANDs2ANDxANDy);
+
+    Or(x = Nots1ANDNots2ANDxANDyORNots1ANDs2ANDNotxANDy, y = Nots1ANDs2ANDxANDNotyORs1ANDNots2ANDNotxANDy,
+    out = Nots1ANDNots2ANDxANDyORNots1ANDs2ANDNotxANDyORNots1ANDs2ANDxANDNotyORs1ANDNots2ANDNotxANDy);
+    Or(x = s1ANDNots2ANDxANDNotyORs1ANDNots2ANDxANDy, y = s1ANDs2ANDNotxANDyORs1ANDs2ANDxANDy,
+    out = s1ANDNots2ANDxANDNotyORs1ANDNots2ANDxANDyORs1ANDs2ANDNotxANDyORs1ANDs2ANDxANDy);
+
+    Or(x=Nots1ANDNots2ANDxANDyORNots1ANDs2ANDNotxANDyORNots1ANDs2ANDxANDNotyORs1ANDNots2ANDNotxANDy,
+    y=s1ANDNots2ANDxANDNotyORs1ANDNots2ANDxANDyORs1ANDs2ANDNotxANDyORs1ANDs2ANDxANDy,
+    out=Nots1ANDNots2ANDxANDyORNots1ANDs2ANDNotxANDyORNots1ANDs2ANDxANDNotyORs1ANDNots2ANDNotxANDyORs1ANDNots2ANDxANDNotyORs1ANDNots2ANDxANDyORs1ANDs2ANDNotxANDyORs1ANDs2ANDxANDy);
+
+
+    // The final output
+    // The final output is in DNF
+    Or(x=Nots1ANDNots2ANDxANDyORNots1ANDs2ANDNotxANDyORNots1ANDs2ANDxANDNotyORs1ANDNots2ANDNotxANDyORs1ANDNots2ANDxANDNotyORs1ANDNots2ANDxANDyORs1ANDs2ANDNotxANDyORs1ANDs2ANDxANDy,
+    y=s1ANDs2ANDNotxANDNoty,
+    out=f);
+
+
+
+    }

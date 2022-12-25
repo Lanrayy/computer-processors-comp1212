@@ -1,0 +1,37 @@
+/*
+This file contains the solution for cw2 part2
+*/
+
+
+
+CHIP cw2 {
+     IN indata[8], enable, load;
+     OUT sout, complete;
+
+     PARTS:
+
+     And(x = indata[0], y = indata[0], out= in0);
+     And(x = indata[1], y = indata[1], out= in1);
+     And(x = indata[2], y = indata[2], out= in2);
+     And(x = indata[3], y = indata[3], out= in3);
+     And(x = indata[4], y = indata[4], out= in4);
+     And(x = indata[5], y = indata[5], out= in5);
+     And(x = indata[6], y = indata[6], out= in6);
+     And(x = indata[7], y = indata[7], out= in7);
+
+
+
+
+
+
+
+
+     DFF(x = in0, out = out2);
+     DFF(x = out2, out = out3);
+     DFF(x = out3, out = out4);
+     DFF(x = out4, out = out5);
+     DFF(x = out5, out = out6);
+     DFF(x = out6, out = out7);
+     DFF(x = out7, out = sout);
+
+}
